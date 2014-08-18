@@ -794,3 +794,24 @@ func TestFootnotesWithParameters(t *testing.T) {
 
 	doTestsInlineParam(t, tests, EXTENSION_FOOTNOTES, HTML_FOOTNOTE_RETURN_LINKS, params)
 }
+
+
+var mathTests = []string {
+    "Here comes some inline math: $T_r(0,t)=0$.",
+    "<p>Here comes some inline math: $T_r(0,t)=0$.</p>\n",
+`Some text followed by display math:
+
+$$\int_0^\infty f(x)\;dx$$
+
+And more text.`,
+`<p>Some text followed by display math:</p>
+
+<p>$$\int_0^\infty f(x)\;dx$$</p>
+
+<p>And more text.</p>
+`,
+}
+
+func TestMath(t *testing.T) {
+    doTestsInlineParam(t, mathTests, EXTENSION_MATH, 0, HtmlRendererParameters{})
+}

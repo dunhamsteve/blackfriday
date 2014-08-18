@@ -109,6 +109,48 @@ func emphasis(p *parser, out *bytes.Buffer, data []byte, offset int) int {
 	return 0
 }
 
+func mathSpan(p *parser, out *bytes.Buffer, data []byte, offset int) int {
+	data = data[offset:]
+
+	nb := 0
+
+	// count the number of backticks in the delimiter
+	for nb < len(data) && data[nb] == '$' {
+		nb++
+	}
+	// find the next delimiter
+	i, end := 0, 0
+	for end = nb; end < len(data) && i < nb; end++ {
+		if data[end] == '$' {
+			i++
+		} else {
+			i = 0
+		}
+	}
+
+	// no matching delimiter?
+	if i < nb && end >= len(data) {
+		return 0
+	}
+
+	// trim outside whitespace
+	fBegin := nb
+	for fBegin < end && data[fBegin] == ' ' {
+		fBegin++
+	}
+
+	fEnd := end - nb
+	for fEnd > fBegin && data[fEnd-1] == ' ' {
+		fEnd--
+	}
+
+	// render the equation (dump as-is, let TeX or MathJaX sort it out)
+	if fBegin != fEnd {
+		p.r.NormalText(out, data[0:end])
+	}
+	return end
+}
+
 func codeSpan(p *parser, out *bytes.Buffer, data []byte, offset int) int {
 	data = data[offset:]
 

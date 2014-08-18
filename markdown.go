@@ -41,6 +41,7 @@ const (
 	EXTENSION_NO_EMPTY_LINE_BEFORE_BLOCK             // No need to insert an empty line to start a (code, quote, order list, unorder list)block
 	EXTENSION_HEADER_IDS                             // specify header IDs  with {#id}
 	EXTENSION_TITLEBLOCK                             // Titleblock ala pandoc
+	EXTENSION_MATH                                   // Handle TeX math correctly
 )
 
 // These are the possible flag values for the link renderer.
@@ -294,6 +295,10 @@ func Markdown(input []byte, renderer Renderer, extensions int) []byte {
 
 	if extensions&EXTENSION_FOOTNOTES != 0 {
 		p.notes = make([]*reference, 0)
+	}
+
+	if extensions&EXTENSION_MATH != 0 {
+		p.inlineCallback['$'] = mathSpan
 	}
 
 	first := firstPass(p, input)

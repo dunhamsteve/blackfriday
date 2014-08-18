@@ -176,6 +176,9 @@ implements the following extensions:
     becomes `<sup>4</sup>&frasl;<sub>5</sub>`, which renders as
     <sup>4</sup>&frasl;<sub>5</sub>.
 
+*   **Equations**. Text surrounded by a `$` or `$$` is copied
+    verbatim to the output. This can be used with MathJax (or LaTeX)
+    to render equations in your document.
 
 Other renderers
 ---------------
